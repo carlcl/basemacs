@@ -1,0 +1,82 @@
+# Package.el
+/elpa/
+
+# Native compilation cache (Emacs 28+)
+/eln-cache/
+
+# Compiled elisp
+*.elc
+
+# Auto-save and lock files
+auto-save-list/
+#*#
+.\#*
+*~
+
+.local/
+
+# Transient (Magit)
+/transient/
+
+# Recent files
+/recentf
+
+# Savehist
+/history
+/savehist
+
+# Bookmarks
+/bookmarks
+
+# URL cache
+/url/
+
+# Projectile cache
+/projectile-bookmarks.eld
+/projectile.cache
+
+# TRAMP
+/tramp
+
+# Server socket
+/server/
+
+# Desktop sessions
+/.emacs.desktop
+/.emacs.desktop.lock
+
+# Eshell history
+/eshell/
+/eshell/history
+
+# Org mode generated files
+/org-id-locations
+/.orgids
+
+# LSP caches
+/.lsp-session-v1
+/.lsp-session-v1.*
+/.eglot/
+
+# Tree-sitter cache
+/tree-sitter/
+
+# Temporary files
+/tmp/
+/var/
+
+# Straight.el
+/straight/build/
+/straight/repos/
+
+# Keep the lockfile if using straight.el
+!/straight/versions/
+!/straight/versions/default.el
+
+# package-vc
+/package-vc/
+
+# Authentication and secrets
+/authinfo
+/authinfo.gpg
+/authinfo.gpg~
