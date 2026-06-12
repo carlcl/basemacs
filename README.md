@@ -1,20 +1,20 @@
 # Basemacs
 
-## Emacs configuration
+### Emacs configuration
 
-### init.el
+#### init.el
 
 This is the config entry point that loads all the other configuration files
 
-### packages.el
+#### packages.el
 
 - Sets up the package system
 - Configures the packages that get installed with 'use-package
 
 
-### config.el
+#### config.el
 
 - Configures the editor
-  - themes
+  - Themes
   - UI/UX
   - Global keybindings
