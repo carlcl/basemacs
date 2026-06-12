@@ -58,3 +58,5 @@
 (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
 (global-set-key (kbd "C-M-b") 'counsel-switch-buffer)
 (global-set-key (kbd "C-M-j") 'dired-jump)
+(global-set-key (kbd "C-M-s") 'counsel-projectile-rg)
+(global-set-key (kbd "C-M-f") 'counsel-find-file)

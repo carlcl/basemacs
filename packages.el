@@ -29,9 +29,10 @@
   :ensure t
   :init
   (setq evil-want-integration t)
-  ;(setq evil-want-keybinding nil)
+ ; (setq evil-want-keybinding nil)
   (setq evil-want-C-u-scroll t)
   ;(setq evil-want-C-i-jump nil)
+  (setq evil-undo-system 'undo-redo)
   :config
   (evil-mode 1))
 
@@ -41,12 +42,20 @@
   :init (which-key-mode)
   :diminish (which-key-mode)
   :config
-  (setq which-key-idle-delay 0.3))
+  (setq which-key-idle-delay 0.0))
 
 ;; The best git interface
 (use-package magit
   :ensure t
+  :commands (magit-status magit-get-current-branch)
+  :custom
+  (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1)
   :bind (("C-x g" . magit-status)))
+
+;(use-package evil-collection
+  ;:after (evil magit)
+  ;:config
+  ;(evil-collection-init))
 
 ;; The ivy-counsel-swiper stack
 ;; Ivy provides a better completion framework
@@ -59,7 +68,7 @@
 	 :map ivy-minibuffer-map
 	 ;("TAB" . ivy-alt-done)
 	 ("TAB" . ivy-next-line)
-	 ("S-TAB" . ivy-previous-line)
+	 ("<backtab>" . ivy-previous-line)
 	 ("C-l" . ivy-alt-done)
 	 ("C-j" . ivy-next-line)
 	 ("C-k" . ivy-previous-line)
@@ -116,3 +125,17 @@
   
 ;; Todo (optional): General, Evil-Collection, Hydra
 ;; Todo (mandatory): Projectile, Treemacs, LSP, DAP
+
+(use-package projectile
+  :diminish projectile-mode
+  :config (projectile-mode)
+  :custom ((projectile-completion-system 'ivy))
+  :bind-keymap
+  ("C-c p" . projectile-command-map)
+  :init
+  (when (file-directory-p "~/Dev/code")
+    (setq projectile-project-search-path '("~/Dev/code")))
+  (setq projectile-switch-project-action #'projectile-dired))
+
+(use-package counsel-projectile
+  :config (counsel-projectile-mode))
