@@ -155,6 +155,35 @@
 (setq org-log-into-drawer t)
 (setq org-agenda-files '("~/Org/tasks.org"))
       
+;; Treemacs
+(use-package treemacs
+  :ensure t
+  :bind
+  (("C-c t" . treemacs))
+  :defer t
+  :config
+  (progn
+    (treemacs-follow-mode t)
+    (treemacs-filewatch-mode t)
+    (treemacs-project-follow-mode t)))
+
+ (use-package treemacs-evil
+  :after (treemacs evil)
+  :ensure t)
+
+(use-package treemacs-projectile
+  :after (treemacs projectile)
+  :ensure t)
+
+(use-package treemacs-icons-dired
+  :hook (dired-mode . treemacs-icons-dired-enable-once)
+  :ensure t)
+
+(use-package treemacs-magit
+  :after (treemacs magit)
+  :ensure t)   
+
+
 ;; Set up LSP
 
 (use-package lsp-mode
@@ -180,6 +209,14 @@
   :hook (python-mode . (lambda ()
                           (require 'lsp-pyright)
                           (lsp-deferred))))  ; or lsp
+
+(use-package cmake-mode
+  :ensure t
+  :mode ("CMakeLists\\.txt\\'" "\\.cmake\\'")
+  :hook (cmake-mode . lsp-deferred))
+
+(setq lsp-cmake-server-command "cmake-language-server")
+
 
 (use-package lsp-ui
   :ensure t
