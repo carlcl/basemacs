@@ -64,3 +64,11 @@
 (global-set-key (kbd "C-M-j") 'dired-jump)
 (global-set-key (kbd "C-M-s") 'counsel-projectile-rg)
 (global-set-key (kbd "C-M-f") 'counsel-find-file)
+
+
+;;; Hooks
+(add-hook 'projectile-after-switch-project-hook
+          (lambda ()
+            (let ((f (expand-file-name "debug-config.el" (projectile-project-root))))
+              (when (file-exists-p f)
+                (load-file f)))))
