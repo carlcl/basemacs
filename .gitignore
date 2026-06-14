@@ -83,3 +83,4 @@ auto-save-list/
 
 .cache/
 .dap-breakpoints
+.extension/

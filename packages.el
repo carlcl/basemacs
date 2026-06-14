@@ -181,6 +181,39 @@
                           (require 'lsp-pyright)
                           (lsp-deferred))))  ; or lsp
 
+(use-package lsp-ui
+  :ensure t
+  :after lsp-mode
+  :hook (lsp-mode . lsp-ui-mode)
+  :custom
+  (lsp-ui-doc-enable t)
+  (lsp-ui-doc-delay 0.3)
+  (lsp-ui-doc-position 'at-point)
+  (lsp-ui-doc-show-with-mouse t)
+  (lsp-ui-doc-border "gray")
+  ;; Sideline (in-buffer hints)
+  (lsp-ui-sideline-enable t)
+  (lsp-ui-sideline-show-diagnostics t)
+  (lsp-ui-sideline-show-hover nil)
+
+  ;; Peek (definitions/references popup)
+  (lsp-ui-peek-enable t)
+
+  ;; Flycheck integration display
+  (lsp-ui-flycheck-enable t))
+
+  ;; Optional: better LSP completion integration
+  (use-package cape
+    :ensure t
+    :init
+    (add-to-list 'completion-at-point-functions #'cape-file)
+    (add-to-list 'completion-at-point-functions #'cape-dabbrev))
+
+(add-hook 'c-mode-hook 'lsp)
+(add-hook 'c++-mode-hook 'lsp)
+(with-eval-after-load 'lsp-mode
+  (add-hook 'lsp-mode-hook #'lsp-enable-which-key-integration)
+  (require 'dap-cpptools))
 
 ;; DAP MODE
 (use-package dap-mode

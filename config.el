@@ -39,11 +39,11 @@
 (make-directory my-backup-dir t)
 
 ;; autosaves (#file#)
-;(setq auto-save-file-name-transforms
-;      `((".*" ,my-auto-save-dir t)))
+(setq auto-save-file-name-transforms
+      `((".*" ,my-auto-save-dir t)))
 
 ;; This should prevent autosaves with ##
-(auto-save-visited-mode 1)
+;(auto-save-visited-mode 1)
 
 ;; backups (file~)
 (setq backup-directory-alist
