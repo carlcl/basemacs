@@ -1,7 +1,7 @@
-;;; Set up Package Management
-
+;; Quicklisp - the lisp package manager
 (load (expand-file-name "~/.quicklisp/slime-helper.el"))
 
+;;; Setup Package Management
 (require 'package)
 
 (setq package-archives
@@ -11,11 +11,9 @@
 
 (package-initialize)
 
-;; Refresh the package contents
 (unless package-archive-contents
   (package-refresh-contents))
 
-;; Install use-package if not installed
 (unless (package-installed-p 'use-package)
   (package-install 'use-package))
 
@@ -98,12 +96,13 @@
   :init
   (ivy-rich-mode 1))
 
-;; SBCL + Quicklisp
+;; SBCL 
 (use-package slime
   :config
   (setq inferior-lisp-program "sbcl")
   (slime-setup '(slime-fancy)))
 
+;; Add more icons to emacs
 (use-package all-the-icons)
 
 ;; A more modern status line
@@ -122,10 +121,8 @@
   ([remap describe-command] . helpful-command)
   ([remap describe-variable] . counsel-describe-variable)
   ([remap describe-key] . helpful-key))
-  
-;; Todo (optional): General, Evil-Collection, Hydra
-;; Todo (mandatory): Projectile, Treemacs, LSP, DAP
 
+;; Projectile - Add project management to emacs
 (use-package projectile
   :diminish projectile-mode
   :config (projectile-mode)
@@ -140,6 +137,7 @@
 (use-package counsel-projectile
   :config (counsel-projectile-mode))
 
+;; Orgmode 
 (use-package org
   :config
   (setq org-ellipsis " ▾"))
@@ -183,7 +181,6 @@
   :after (treemacs magit)
   :ensure t)   
 
-
 ;; Set up LSP
 
 (use-package lsp-mode
@@ -216,7 +213,7 @@
   :hook (cmake-mode . lsp-deferred))
 
 (setq lsp-cmake-server-command "cmake-language-server")
-
+(setq lsp-clients-clangd-args '("--clang-tidy" "--enable-config"))
 
 (use-package lsp-ui
   :ensure t
@@ -270,8 +267,11 @@
 (add-hook 'python-mode-hook 'dap-ui-mode)
 
 (with-eval-after-load 'dap-mode
-  (define-key dap-mode-map (kbd "<f9>") 'dap-breakpoint-toggle)
   (define-key dap-mode-map (kbd "<f5>") 'dap-debug)
+  (define-key dap-mode-map (kbd "<f6>") 'dap-continue)
+  (define-key dap-mode-map (kbd "<f9>") 'dap-breakpoint-toggle)
   (define-key dap-mode-map (kbd "<f10>") 'dap-next)
   (define-key dap-mode-map (kbd "<f11>") 'dap-step-in)
   (define-key dap-mode-map (kbd "<f12>") 'dap-step-out))
+
+;(setq gdb-use-separate-io-buffer t)

@@ -1,3 +1,6 @@
+;;; Editor Configuration
+
+;; UI settings
 ;(load-theme 'modus-vivendi-tinted t)                         ; Set theme
 (load-theme 'wombat t)
 (set-face-attribute 'default nil
@@ -13,7 +16,7 @@
 (set-fringe-mode 10)                                         ; Add some margins
 (setq display-line-numbers-type 'relative)                   ; Set relative line numbers
 
-;; Diasble line numbers in certain modes
+;; Disable line numbers in certain modes
 (dolist (mode '(org-mode-hook
 		term-mode-hook
 		shell-mode-hook
@@ -22,7 +25,7 @@
 
 (setq inhibit-startup-message t)                             ; Disable splash screen
 (setq visible-bell t)                                        ; Disable bell and show visible highlight when executing blocked command
-(toggle-frame-fullscreen)                                    ; Open full screen
+;(toggle-frame-fullscreen)                                    ; Open full screen
 ;(set-face-attribute 'default nil :font "Fira Code Retina")
 
 ;; Redirect backups and auto save
@@ -42,8 +45,6 @@
 (setq auto-save-file-name-transforms
       `((".*" ,my-auto-save-dir t)))
 
-;; This should prevent autosaves with ##
-;(auto-save-visited-mode 1)
 
 ;; backups (file~)
 (setq backup-directory-alist
@@ -56,7 +57,7 @@
 (defun eshell/dev ()
   (cd "~/Dev"))
 
-;; Keybindings
+;;; Keybindings
 ;; Make ESC quit prompts
 (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
 (global-set-key (kbd "C-M-b") 'counsel-switch-buffer)
