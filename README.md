@@ -1,6 +1,6 @@
 # Basemacs
 
-### Emacs configuration
+An emacs configuration that goes from vanilla to full IDE.
 
 #### init.el
 
@@ -18,3 +18,5 @@ This is the config entry point that loads all the other configuration files
   - Themes
   - UI/UX
   - Global keybindings
+
+
