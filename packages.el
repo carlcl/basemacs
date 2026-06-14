@@ -155,3 +155,53 @@
 (setq org-log-into-drawer t)
 (setq org-agenda-files '("~/Org/tasks.org"))
       
+;; Set up LSP
+
+(use-package lsp-mode
+  :commands (lsp lsp-deferred)
+  :init
+  (setq lsp-keymap-prefix "C-c l")
+  :config
+  (lsp-enable-which-key-integration t))
+
+(use-package corfu
+  :init
+  (global-corfu-mode)
+  :custom
+  (corfu-auto t)
+  (corfu-auto-prefix 1))
+
+(setq lsp-completion-provider :capf)
+
+;; LSP Language Servers
+(use-package lsp-pyright
+  :ensure t
+  :custom (lsp-pyright-langserver-command "pyright") ;; or basedpyright
+  :hook (python-mode . (lambda ()
+                          (require 'lsp-pyright)
+                          (lsp-deferred))))  ; or lsp
+
+
+;; DAP MODE
+(use-package dap-mode
+  :ensure t
+  :after lsp-mode
+  :config
+  (dap-auto-configure-mode))
+
+;; DAP Extensions
+(use-package dap-python
+  :ensure nil 
+  :after dap-mode
+  :config
+  (setq dap-python-debugger 'debugpy))
+
+(add-hook 'python-mode-hook 'dap-mode)
+(add-hook 'python-mode-hook 'dap-ui-mode)
+
+(with-eval-after-load 'dap-mode
+  (define-key dap-mode-map (kbd "<f9>") 'dap-breakpoint-toggle)
+  (define-key dap-mode-map (kbd "<f5>") 'dap-debug)
+  (define-key dap-mode-map (kbd "<f10>") 'dap-next)
+  (define-key dap-mode-map (kbd "<f11>") 'dap-step-in)
+  (define-key dap-mode-map (kbd "<f12>") 'dap-step-out))
