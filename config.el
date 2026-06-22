@@ -1,10 +1,6 @@
 ;;; Editor Configuration
+;;; --------------------
 
-;; UI settings
-;(load-theme 'modus-vivendi-tinted t)                         ; Set theme
-(load-theme 'wombat t)
-(set-face-attribute 'default nil
-		    :background "#0d0e1c")
 
 (tool-bar-mode -1)                                           ; Disable visual toolbar
 (menu-bar-mode -1)                                           ; Disable visual menu bar
@@ -12,9 +8,9 @@
 (tooltip-mode -1)                                            ; Disable tooltips
 
 (column-number-mode)
-(global-display-line-numbers-mode 1)                         ; Enable line numbers
 (set-fringe-mode 10)                                         ; Add some margins
-(setq display-line-numbers-type 'relative)                   ; Set relative line numbers
+(global-display-line-numbers-mode 1)                         ; Enable line numbers
+;(setq display-line-numbers-type 'relative)                   ; Set relative line numbers
 
 ;; Disable line numbers in certain modes
 (dolist (mode '(org-mode-hook
@@ -25,8 +21,10 @@
 
 (setq inhibit-startup-message t)                             ; Disable splash screen
 (setq visible-bell t)                                        ; Disable bell and show visible highlight when executing blocked command
-;(toggle-frame-fullscreen)                                    ; Open full screen
-;(set-face-attribute 'default nil :font "Fira Code Retina")
+
+;; Window Tabs
+(global-tab-line-mode 1)
+(setq tab-line-tabs-function #'tab-line-tabs-window-buffers)
 
 ;; Redirect backups and auto save
 (defvar my-emacs-tmp-dir
@@ -41,12 +39,9 @@
 (make-directory my-auto-save-dir t)
 (make-directory my-backup-dir t)
 
-;; autosaves (#file#)
 (setq auto-save-file-name-transforms
       `((".*" ,my-auto-save-dir t)))
 
-
-;; backups (file~)
 (setq backup-directory-alist
       `((".*" . ,my-backup-dir)))
 
@@ -54,21 +49,28 @@
 (defun eshell/emacs-conf ()
   (cd "~/.emacs.d"))
 
-(defun eshell/dev ()
-  (cd "~/Dev"))
-
-;;; Keybindings
-;; Make ESC quit prompts
+;; Keybindings
 (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
 (global-set-key (kbd "C-M-b") 'counsel-switch-buffer)
 (global-set-key (kbd "C-M-j") 'dired-jump)
 (global-set-key (kbd "C-M-s") 'counsel-projectile-rg)
 (global-set-key (kbd "C-M-f") 'counsel-find-file)
 
-
-;;; Hooks
+;; Hooks
 (add-hook 'projectile-after-switch-project-hook
-          (lambda ()
-            (let ((f (expand-file-name "debug-config.el" (projectile-project-root))))
-              (when (file-exists-p f)
-                (load-file f)))))
+	  (lambda ()
+            (let ((code-dir (expand-file-name ".vscode" (projectile-project-root))))
+              (if (file-directory-p code-dir)
+             	  (dolist (file (directory-files code-dir t "\\.el$"))
+             	    (message "Load file: %s" file)
+             	    (load-file file))))))
+	     
+;; Functions
+(defun load-code-files()
+  (let ((code-dir (expand-file-name ".vscode" (projectile-project-root))))
+    (if (file-directory-p code-dir)
+        (dolist (file (directory-files code-dir t "\\.el$"))
+          (message "Load file: %s" file)
+          (load-file file)))))
+  
+	    

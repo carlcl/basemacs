@@ -1,9 +1,11 @@
+;;; Package Configuration
+;;; ---------------------
+
 ;; Quicklisp - the lisp package manager
 (load (expand-file-name "~/.quicklisp/slime-helper.el"))
 
 ;;; Setup Package Management
 (require 'package)
-
 (setq package-archives
       '(("melpa" . "https://melpa.org/packages/")
 	("org" . "https://orgmode.org/elpa/")
@@ -20,16 +22,41 @@
 (require 'use-package)
 (setq use-package-always-ensure t)
 
-;; Install packages
+;;; packages
+;;; --------
+
+(use-package vterm
+  :ensure t)
+
+;; Doom Modeline - A more modern status line
+(use-package doom-modeline
+  :ensure t
+  :init (doom-modeline-mode 1)
+  :custom ((doom-modeline-height 25)))
+
+(use-package doom-themes
+  :ensure t
+  :custom
+  ;; Global settings (defaults)
+  (doom-themes-enable-bold t)   ; if nil, bold is universally disabled
+  (doom-themes-enable-italic t) ; if nil, italics is universally disabled
+  ;; for treemacs users
+  (doom-themes-treemacs-theme "doom-atom") ; use "doom-colors" for less minimal icon theme
+  :config
+  (load-theme 'doom-ayu-dark t)
+  ;; Enable flashing mode-line on errors
+  (doom-themes-visual-bell-config)
+  ;; or for treemacs users
+  ;(doom-themes-treemacs-config)
+  ;; Corrects (and improves) org-mode's native fontification.
+  (doom-themes-org-config))
 
 ;; Vim keybindings with evil
 (use-package evil
   :ensure t
   :init
   (setq evil-want-integration t)
- ; (setq evil-want-keybinding nil)
   (setq evil-want-C-u-scroll t)
-  ;(setq evil-want-C-i-jump nil)
   (setq evil-undo-system 'undo-redo)
   :config
   (evil-mode 1))
@@ -42,18 +69,13 @@
   :config
   (setq which-key-idle-delay 0.0))
 
-;; The best git interface
+;; Git 
 (use-package magit
   :ensure t
   :commands (magit-status magit-get-current-branch)
   :custom
   (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1)
   :bind (("C-x g" . magit-status)))
-
-;(use-package evil-collection
-  ;:after (evil magit)
-  ;:config
-  ;(evil-collection-init))
 
 ;; The ivy-counsel-swiper stack
 ;; Ivy provides a better completion framework
@@ -105,12 +127,6 @@
 ;; Add more icons to emacs
 (use-package all-the-icons)
 
-;; A more modern status line
-(use-package doom-modeline
-  :ensure t
-  :init (doom-modeline-mode 1)
-  :custom ((doom-modeline-height)))
-
 ;; Helpful - a package that provides an improved help system
 (use-package helpful
   :custom
@@ -157,7 +173,8 @@
 (use-package treemacs
   :ensure t
   :bind
-  (("C-c t" . treemacs))
+  (("C-c t" . treemacs-select-window)
+   ("C-c b" . treemacs))
   :defer t
   :config
   (progn
@@ -182,7 +199,6 @@
   :ensure t)   
 
 ;; Set up LSP
-
 (use-package lsp-mode
   :commands (lsp lsp-deferred)
   :init
@@ -190,6 +206,7 @@
   :config
   (lsp-enable-which-key-integration t))
 
+;; Corfu - an in-buffer completion package. Displays completions in a popup overlay
 (use-package corfu
   :init
   (global-corfu-mode)
@@ -206,12 +223,11 @@
   :hook (python-mode . (lambda ()
                           (require 'lsp-pyright)
                           (lsp-deferred))))  ; or lsp
-
+;; Cmake
 (use-package cmake-mode
   :ensure t
   :mode ("CMakeLists\\.txt\\'" "\\.cmake\\'")
   :hook (cmake-mode . lsp-deferred))
-
 (setq lsp-cmake-server-command "cmake-language-server")
 (setq lsp-clients-clangd-args '("--clang-tidy" "--enable-config"))
 
@@ -254,17 +270,11 @@
   :ensure t
   :after lsp-mode
   :config
-  (dap-auto-configure-mode))
-
-;; DAP Extensions
-(use-package dap-python
-  :ensure nil 
-  :after dap-mode
-  :config
-  (setq dap-python-debugger 'debugpy))
-
-(add-hook 'python-mode-hook 'dap-mode)
-(add-hook 'python-mode-hook 'dap-ui-mode)
+  (dap-auto-configure-mode)
+  (require 'dap-gdb)
+  (require 'dap-python)
+  (setq dap-python-debugger 'debugpy)
+  (setq dap-default-terminal-kind "internal"))
 
 (with-eval-after-load 'dap-mode
   (define-key dap-mode-map (kbd "<f5>") 'dap-debug)
@@ -273,5 +283,3 @@
   (define-key dap-mode-map (kbd "<f10>") 'dap-next)
   (define-key dap-mode-map (kbd "<f11>") 'dap-step-in)
   (define-key dap-mode-map (kbd "<f12>") 'dap-step-out))
-
-;(setq gdb-use-separate-io-buffer t)
