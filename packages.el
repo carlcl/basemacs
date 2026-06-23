@@ -262,8 +262,7 @@
 (add-hook 'c-mode-hook 'lsp)
 (add-hook 'c++-mode-hook 'lsp)
 (with-eval-after-load 'lsp-mode
-  (add-hook 'lsp-mode-hook #'lsp-enable-which-key-integration)
-  (require 'dap-cpptools))
+  (add-hook 'lsp-mode-hook #'lsp-enable-which-key-integration))
 
 ;; DAP MODE
 (use-package dap-mode
@@ -271,10 +270,12 @@
   :after lsp-mode
   :config
   (dap-auto-configure-mode)
-  (require 'dap-gdb)
+  (require 'dap-cpptools)
   (require 'dap-python)
   (setq dap-python-debugger 'debugpy)
-  (setq dap-default-terminal-kind "internal"))
+  (setq dap-default-terminal-kind "internal")
+  (dap-mode 1)
+  (dap-ui-mode 1))
 
 (with-eval-after-load 'dap-mode
   (define-key dap-mode-map (kbd "<f5>") 'dap-debug)

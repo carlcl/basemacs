@@ -73,4 +73,5 @@
           (message "Load file: %s" file)
           (load-file file)))))
   
-	    
+(setq dired-kill-when-opening-new-dired-buffer t
+      dired-auto-revert-buffer t)
