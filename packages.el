@@ -69,7 +69,7 @@
   :config
   (setq which-key-idle-delay 0.0))
 
-;; Git 
+;; Git
 (use-package magit
   :ensure t
   :commands (magit-status magit-get-current-branch)
@@ -113,12 +113,12 @@
   :config
   (setq ivy-initial-inputs-alist nil))
 
-;; ivy-rich adds more configuration options, and shows descriptions next to common functions  
+;; ivy-rich adds more configuration options, and shows descriptions next to common functions
 (use-package ivy-rich
   :init
   (ivy-rich-mode 1))
 
-;; SBCL 
+;; SBCL
 (use-package slime
   :config
   (setq inferior-lisp-program "sbcl")
@@ -153,7 +153,7 @@
 (use-package counsel-projectile
   :config (counsel-projectile-mode))
 
-;; Orgmode 
+;; Orgmode
 (use-package org
   :config
   (setq org-ellipsis " ▾"))
@@ -196,13 +196,20 @@
 
 (use-package treemacs-magit
   :after (treemacs magit)
-  :ensure t)   
+  :ensure t)
+
+;; Flycheck provides syntax checking and static analysis
+(use-package flycheck
+  :ensure t
+  :init
+  (global-flycheck-mode))
 
 ;; Set up LSP
 (use-package lsp-mode
   :commands (lsp lsp-deferred)
   :init
   (setq lsp-keymap-prefix "C-c l")
+  (setq lsp-diagnostics-provider :flycheck)
   :config
   (lsp-enable-which-key-integration t))
 
@@ -261,15 +268,13 @@
 
 (add-hook 'c-mode-hook 'lsp)
 (add-hook 'c++-mode-hook 'lsp)
-(with-eval-after-load 'lsp-mode
-  (add-hook 'lsp-mode-hook #'lsp-enable-which-key-integration))
 
 ;; DAP MODE
 (use-package dap-mode
   :ensure t
   :after lsp-mode
   :config
-  (dap-auto-configure-mode)
+  ;(dap-auto-configure-mode)
   (require 'dap-cpptools)
   (require 'dap-python)
   (setq dap-python-debugger 'debugpy)
@@ -284,3 +289,6 @@
   (define-key dap-mode-map (kbd "<f10>") 'dap-next)
   (define-key dap-mode-map (kbd "<f11>") 'dap-step-in)
   (define-key dap-mode-map (kbd "<f12>") 'dap-step-out))
+
+(provide 'packages)
+;;; packages.el ends here
