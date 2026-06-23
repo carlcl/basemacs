@@ -7,8 +7,8 @@
 (load (expand-file-name "~/.emacs.d/config.el"))
 (load (expand-file-name "~/.emacs.d/utils.el"))
 
-(add-hook 'emacs-startup-hook
-	  (lambda () (eshell)))
+;;(add-hook 'emacs-startup-hook
+;;	  (lambda () (eshell)))
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.

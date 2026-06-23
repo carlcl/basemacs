@@ -1,5 +1,4 @@
-;;; Editor Configuration
-;;; --------------------
+;;; Commentary: config.el ---  Editor Configuration
 
 
 (tool-bar-mode -1)                                           ; Disable visual toolbar
@@ -15,6 +14,7 @@
 ;; Disable line numbers in certain modes
 (dolist (mode '(org-mode-hook
 		term-mode-hook
+		vterm-mode-hook
 		shell-mode-hook
 		eshell-mode-hook))
   (add-hook mode (lambda () (display-line-numbers-mode 0))))
