@@ -1,14 +1,15 @@
-;;;; Emacs main configuration file
-;;;; -----------------------------
-
+;;; package --- Summary: Emacs config -*- lexical-binding: t; -*-
+;;; Commentary:
+;;; The initial config file that loads all config modules.
+;;; Code:
 
 ;; Load configuration files
 (load (expand-file-name "~/.emacs.d/packages.el"))
 (load (expand-file-name "~/.emacs.d/config.el"))
 (load (expand-file-name "~/.emacs.d/utils.el"))
 
-;;(add-hook 'emacs-startup-hook
-;;	  (lambda () (eshell)))
+(add-hook 'emacs-startup-hook
+	  (lambda () (eshell)))
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -56,3 +57,6 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+
+(provide 'init)
+;;; init.el ends here

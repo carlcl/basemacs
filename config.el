@@ -1,6 +1,9 @@
-;;; Commentary: config.el ---  Editor Configuration
+;;; package --- Summary: Emacs config -*- lexical-binding: t; -*-
 
+;;; Commentary:
+;;; Basic editor configuration.
 
+;;; Code:
 (tool-bar-mode -1)                                           ; Disable visual toolbar
 (menu-bar-mode -1)                                           ; Disable visual menu bar
 (scroll-bar-mode -1)                                         ; Disable scroll bars
@@ -23,6 +26,7 @@
 (setq visible-bell t)                                        ; Disable bell and show visible highlight when executing blocked command
 
 ;; Window Tabs
+(require 'tab-line)
 (global-tab-line-mode 1)
 (setq tab-line-tabs-function #'tab-line-tabs-window-buffers)
 
@@ -47,6 +51,7 @@
 
 ;; NAV functions
 (defun eshell/emacs-conf ()
+  "Navigate to Emacs configuration folder in eshell."
   (cd "~/.emacs.d"))
 
 ;; Keybindings
@@ -55,23 +60,41 @@
 (global-set-key (kbd "C-M-j") 'dired-jump)
 (global-set-key (kbd "C-M-s") 'counsel-projectile-rg)
 (global-set-key (kbd "C-M-f") 'counsel-find-file)
+(global-set-key (kbd "M-<up>") 'move-text-up)
+(global-set-key (kbd "M-k") 'move-text-up)
+(global-set-key (kbd "M-<down>") 'move-text-down)
+(global-set-key (kbd "M-j") 'move-text-down)
 
-;; Hooks
-(add-hook 'projectile-after-switch-project-hook
-	  (lambda ()
-            (let ((code-dir (expand-file-name ".vscode" (projectile-project-root))))
-              (if (file-directory-p code-dir)
-             	  (dolist (file (directory-files code-dir t "\\.el$"))
-             	    (message "Load file: %s" file)
-             	    (load-file file))))))
-	     
 ;; Functions
+(require 'projectile)
 (defun load-code-files()
+  "Load all .el files in the .vscode folder."
   (let ((code-dir (expand-file-name ".vscode" (projectile-project-root))))
     (if (file-directory-p code-dir)
         (dolist (file (directory-files code-dir t "\\.el$"))
           (message "Load file: %s" file)
           (load-file file)))))
-  
+					
+; Make dired use a single buffer
+(require 'dired)
 (setq dired-kill-when-opening-new-dired-buffer t
       dired-auto-revert-buffer t)
+
+(c-add-style "my-c-style"
+	     '("bsd"
+	       (c-basic-offset . 4)
+	       (c-hanging-semi&comma-criteria . nil)))
+
+(require 'lsp)
+(require 'cc-mode)
+;(add-hook 'c-mode-hook 'lsp)
+(add-hook 'c-mode-common-hook
+	  (lambda ()
+	    (c-set-style "my-c-style")
+	    (electric-pair-mode 1)
+	    (c-toggle-auto-newline 1)
+	    (setq lsp-enable-indentation nil)
+	    (lsp)))
+
+(provide 'config)
+;;; config.el ends here

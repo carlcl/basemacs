@@ -1,5 +1,7 @@
-;;; Package Configuration
-;;; ---------------------
+;;; package --- Summary: Emacs config -*- lexical-binding: t; -*-
+;;; Commentary:
+;;; Package configuration
+;;; Code:
 
 ;; Quicklisp - the lisp package manager
 (load (expand-file-name "~/.quicklisp/slime-helper.el"))
@@ -118,6 +120,9 @@
   :init
   (ivy-rich-mode 1))
 
+(use-package move-text
+  :ensure t)
+
 ;; SBCL
 (use-package slime
   :config
@@ -164,6 +169,8 @@
   :custom
   (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
 
+(require 'org)
+(require 'org-agenda)
 (setq org-agenda-start-with-log-mode t)
 (setq org-log-done 'time)
 (setq org-log-into-drawer t)
@@ -176,6 +183,8 @@
   (("C-c t" . treemacs-select-window)
    ("C-c b" . treemacs))
   :defer t
+  :functions (treemacs-follow-mode
+	      treemacs-filewatch-mode)
   :config
   (progn
     (treemacs-follow-mode t)
@@ -207,9 +216,14 @@
 ;; Set up LSP
 (use-package lsp-mode
   :commands (lsp lsp-deferred)
-  :init
-  (setq lsp-keymap-prefix "C-c l")
-  (setq lsp-diagnostics-provider :flycheck)
+  :functions
+  (lsp-enable-which-key-integration)
+  :custom
+  (lsp-keymap-prefix "C-c l")
+  (lsp-diagnostics-provider :flycheck)
+  (lsp-completion-provider :capf)
+  (lsp-cmake-server-command "cmake-language-server")
+  (lsp-clients-clangd-args '("--clang-tidy" "--enable-config"))
   :config
   (lsp-enable-which-key-integration t))
 
@@ -220,8 +234,6 @@
   :custom
   (corfu-auto t)
   (corfu-auto-prefix 1))
-
-(setq lsp-completion-provider :capf)
 
 ;; LSP Language Servers
 (use-package lsp-pyright
@@ -235,8 +247,6 @@
   :ensure t
   :mode ("CMakeLists\\.txt\\'" "\\.cmake\\'")
   :hook (cmake-mode . lsp-deferred))
-(setq lsp-cmake-server-command "cmake-language-server")
-(setq lsp-clients-clangd-args '("--clang-tidy" "--enable-config"))
 
 (use-package lsp-ui
   :ensure t
@@ -269,16 +279,22 @@
 (add-hook 'c-mode-hook 'lsp)
 (add-hook 'c++-mode-hook 'lsp)
 
+(use-package yasnippet
+  :ensure t
+  :config
+  (require 'yasnippet)
+  (yas-global-mode 1))
+
 ;; DAP MODE
 (use-package dap-mode
   :ensure t
   :after lsp-mode
-  :config
-  ;(dap-auto-configure-mode)
-  (require 'dap-cpptools)
-  (require 'dap-python)
+  :custom
   (setq dap-python-debugger 'debugpy)
   (setq dap-default-terminal-kind "internal")
+  :config
+  (require 'dap-cpptools)
+  (require 'dap-python)
   (dap-mode 1)
   (dap-ui-mode 1))
 
