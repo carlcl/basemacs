@@ -82,6 +82,7 @@
 ;; The ivy-counsel-swiper stack
 ;; Ivy provides a better completion framework
 ;; Swiper is bundled with Ivy and provides in-buffer fuzzy search
+
 (use-package ivy
   :ensure t
   :diminish
@@ -102,7 +103,23 @@
 	 ("C-k" . ivy-previous-line)
 	 ("C-d" . ivy-reverse-i-search-kill))
   :config
- (ivy-mode 1))
+  (ivy-mode 1))
+
+(use-package ivy-posframe
+  :after ivy
+  :commands (ivy-posframe-mode
+	     ivy-posframe-display-at-frame-center)
+  :init
+  (ivy-posframe-mode 1)
+  :config
+  (setq ivy-height 40
+	ivy-posframe-width 160
+        ivy-posframe-height 40
+        ivy-posframe-min-width 80
+        ivy-posframe-border-width 1)
+  (setq ivy-posframe-display-functions-alist
+      '((t . ivy-posframe-display-at-frame-center))))
+
 
 ;; counsel provides ivy-optimised replacement functions of common emacs commands
 (use-package counsel
@@ -110,6 +127,7 @@
   :bind (("M-x" . counsel-M-x)
 	 ("C-x b" . counsel-ibuffer)
 	 ("C-x C-f" . counsel-find-file)
+	 ("C-p" . counsel-projectile-find-file)
 	 :map minibuffer-local-map
 	 ("C-r" . 'counsel-minibuffer-history))
   :config
