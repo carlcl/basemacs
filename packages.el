@@ -89,9 +89,9 @@
   :bind (("C-s" . swiper)
 	 ;("C-S" . swiper-all)
 	 :map ivy-minibuffer-map
-	 ;("TAB" . ivy-alt-done)
-	 ("TAB" . ivy-next-line)
-	 ("<backtab>" . ivy-previous-line)
+	 ("TAB" . ivy-alt-done)
+	 ;("TAB" . ivy-next-line)
+	 ;("<backtab>" . ivy-previous-line)
 	 ("C-l" . ivy-alt-done)
 	 ("C-j" . ivy-next-line)
 	 ("C-k" . ivy-previous-line)
@@ -249,6 +249,9 @@
 (use-package corfu
   :init
   (global-corfu-mode)
+  ;; :bind (:map corfu-map
+	      ;; ("C-n" . corfu-next)
+	      ;; ("C-p" . corfu-previous))
   :custom
   (corfu-auto t)
   (corfu-auto-prefix 1))

@@ -9,9 +9,8 @@
 (load (expand-file-name "~/.emacs.d/utils.el"))
 (load (expand-file-name "~/.emacs.d/cmake_tasks.el"))
 
-
-(add-hook 'emacs-startup-hook
-	  (lambda () (eshell)))
+;(add-hook 'emacs-startup-hook
+;	  (lambda () (eshell)))
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -59,6 +58,10 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+
+(require 'server)
+(unless (server-running-p)
+  (server-start))
 
 (provide 'init)
 ;;; init.el ends here
