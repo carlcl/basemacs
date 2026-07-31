@@ -7,8 +7,9 @@
 (load (expand-file-name "~/.emacs.d/packages.el"))
 (load (expand-file-name "~/.emacs.d/config.el"))
 (load (expand-file-name "~/.emacs.d/utils.el"))
+(load (expand-file-name "~/.emacs.d/dev_config.el"))
 (load (expand-file-name "~/.emacs.d/cmake_tasks.el"))
-
+(load (expand-file-name "~/.emacs.d/keybindings.el"))
 ;(add-hook 'emacs-startup-hook
 ;	  (lambda () (eshell)))
 
@@ -52,16 +53,13 @@
      "7de64ff2bb2f94d7679a7e9019e23c3bf1a6a04ba54341c36e7cf2d2e56e2bcc"
      default))
  '(package-selected-packages nil))
+
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
-
-(require 'server)
-(unless (server-running-p)
-  (server-start))
 
 (provide 'init)
 ;;; init.el ends here

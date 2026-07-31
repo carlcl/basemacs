@@ -55,6 +55,7 @@
   (interactive)
   (save-project-buffers)
   (let ((default-directory (projectile-project-root)))
+    (save-some-buffers t)
     (compile "cmake --build BUILD/release")))
 
 (defun cmake-rebuild-release ()

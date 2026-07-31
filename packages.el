@@ -4,7 +4,9 @@
 ;;; Code:
 
 ;; Quicklisp - the lisp package manager
-(load (expand-file-name "~/.quicklisp/slime-helper.el"))
+;(load (expand-file-name "~/.quicklisp/slime-helper.el"))
+(let ((f (expand-file-name "~/.quicklisp/slime-helper.el")))
+  (when (file-exists-p f) (load f)))
 
 ;;; Setup Package Management
 (require 'package)
@@ -26,9 +28,9 @@
 
 ;;; packages
 ;;; --------
-
-(use-package vterm
-  :ensure t)
+(when (eq system-type 'gnu/linux)
+  (use-package vterm
+    :ensure t))
 
 ;; Doom Modeline - A more modern status line
 (use-package doom-modeline
@@ -79,27 +81,26 @@
   (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1)
   :bind (("C-x g" . magit-status)))
 
-;; The ivy-counsel-swiper stack
-;; Ivy provides a better completion framework
-;; Swiper is bundled with Ivy and provides in-buffer fuzzy search
-
+;; The ivy-counsel-swiper stack:
+;; Ivy is a better completion framework
+;; Swiper provide in-buffer fuzzy searcho
+;; Counsel is a collection of Ivy-enhanced versions of common Emacs command.
 (use-package ivy
   :ensure t
   :diminish
   :bind (("C-s" . swiper)
-	 ;("C-S" . swiper-all)
+	 ("C-S-s" . swiper-all)
 	 :map ivy-minibuffer-map
 	 ("TAB" . ivy-alt-done)
-	 ;("TAB" . ivy-next-line)
-	 ;("<backtab>" . ivy-previous-line)
-	 ("C-l" . ivy-alt-done)
 	 ("C-j" . ivy-next-line)
 	 ("C-k" . ivy-previous-line)
 	 :map ivy-switch-buffer-map
+	 ("C-j" . ivy-next-line)
 	 ("C-k" . ivy-previous-line)
 	 ("C-l" . ivy-done)
 	 ("C-d" . ivy-switch-buffer-kill)
 	 :map ivy-reverse-i-search-map
+	 ("C-j" . ivy-next-line)
 	 ("C-k" . ivy-previous-line)
 	 ("C-d" . ivy-reverse-i-search-kill))
   :config
@@ -118,8 +119,12 @@
         ivy-posframe-min-width 80
         ivy-posframe-border-width 1)
   (setq ivy-posframe-display-functions-alist
-      '((t . ivy-posframe-display-at-frame-center))))
+	'((t . ivy-posframe-display-at-frame-center))))
 
+;; ivy-rich adds more configuration options, and shows descriptions next to common functions
+(use-package ivy-rich
+  :init
+  (ivy-rich-mode 1))
 
 ;; counsel provides ivy-optimised replacement functions of common emacs commands
 (use-package counsel
@@ -133,19 +138,8 @@
   :config
   (setq ivy-initial-inputs-alist nil))
 
-;; ivy-rich adds more configuration options, and shows descriptions next to common functions
-(use-package ivy-rich
-  :init
-  (ivy-rich-mode 1))
-
-(use-package move-text
-  :ensure t)
-
-;; SBCL
-(use-package slime
-  :config
-  (setq inferior-lisp-program "sbcl")
-  (slime-setup '(slime-fancy)))
+;; (use-package move-text
+;;   :ensure t)
 
 ;; Add more icons to emacs
 (use-package all-the-icons)
@@ -283,23 +277,26 @@
   (lsp-ui-sideline-enable t)
   (lsp-ui-sideline-show-diagnostics t)
   (lsp-ui-sideline-show-hover nil)
-
   ;; Peek (definitions/references popup)
   (lsp-ui-peek-enable t)
-
   ;; Flycheck integration display
   (lsp-ui-flycheck-enable t))
 
   ;; Optional: better LSP completion integration
-  (use-package cape
+(use-package cape
     :ensure t
     :init
     (add-to-list 'completion-at-point-functions #'cape-file)
     (add-to-list 'completion-at-point-functions #'cape-dabbrev))
 
 (add-hook 'c-mode-hook 'lsp)
+(add-hook 'c-mode-hook
+          (lambda ()
+            (setq-local comment-start "// ")
+            (setq-local comment-end "")))
 (add-hook 'c++-mode-hook 'lsp)
 
+;; Yasnippet adds coding snippets
 (use-package yasnippet
   :ensure t
   :config
@@ -311,21 +308,13 @@
   :ensure t
   :after lsp-mode
   :custom
-  (setq dap-python-debugger 'debugpy)
-  (setq dap-default-terminal-kind "internal")
+  (dap-python-debugger 'debugpy)
+  (dap-default-terminal-kind "internal")
   :config
   (require 'dap-cpptools)
   (require 'dap-python)
   (dap-mode 1)
   (dap-ui-mode 1))
-
-(with-eval-after-load 'dap-mode
-  (define-key dap-mode-map (kbd "<f5>") 'dap-debug)
-  (define-key dap-mode-map (kbd "<f6>") 'dap-continue)
-  (define-key dap-mode-map (kbd "<f9>") 'dap-breakpoint-toggle)
-  (define-key dap-mode-map (kbd "<f10>") 'dap-next)
-  (define-key dap-mode-map (kbd "<f11>") 'dap-step-in)
-  (define-key dap-mode-map (kbd "<f12>") 'dap-step-out))
 
 (provide 'packages)
 ;;; packages.el ends here

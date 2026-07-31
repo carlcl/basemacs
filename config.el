@@ -4,11 +4,11 @@
 ;;; Basic editor configuration.
 
 ;;; Code:
+
 (tool-bar-mode -1)                                           ; Disable visual toolbar
 (menu-bar-mode -1)                                           ; Disable visual menu bar
 (scroll-bar-mode -1)                                         ; Disable scroll bars
 (tooltip-mode -1)                                            ; Disable tooltips
-
 (column-number-mode)
 (set-fringe-mode 10)                                         ; Add some margins
 (global-display-line-numbers-mode 1)                         ; Enable line numbers
@@ -29,6 +29,58 @@
 (require 'tab-line)
 (global-tab-line-mode 1)
 (setq tab-line-tabs-function #'tab-line-tabs-window-buffers)
+
+;; (define-advice tab-line-close-tab (:override (&optional e))
+;;   "Close the selected tab.
+;; If the tab is presented in another window,
+;; close the tab by using the `bury-buffer` function.
+;; If the tab is unique to all existing windows,
+;; kill the buffer with the `kill-buffer` function.
+;; Lastly, if no tabs are left in the window,
+;; it is deleted with the `delete-window` function."
+;;   (interactive "e")
+;;   (let* ((posnp (event-start e))
+;;          (window (posn-window posnp))
+;;          (buffer (get-pos-property 1 'tab (car (posn-string posnp)))))
+;;     (with-selected-window window
+;;       (let ((tab-list (tab-line-tabs-window-buffers))
+;;             (buffer-list (flatten-list
+;;                           (seq-reduce (lambda (list window)
+;;                                         (select-window window t)
+;;                                         (cons (tab-line-tabs-window-buffers) list))
+;;                                       (window-list) nil))))
+;;         (select-window window)
+;;         (if (> (seq-count (lambda (b) (eq b buffer)) buffer-list) 1)
+;;             (progn
+;;               (if (eq buffer (current-buffer))
+;;                   (bury-buffer)
+;;                 (set-window-prev-buffers window (assq-delete-all buffer (window-prev-buffers)))
+;;                 (set-window-next-buffers window (delq buffer (window-next-buffers))))
+;;               (unless (cdr tab-list)
+;;                 (ignore-errors (delete-window window))))
+;;           (and (kill-buffer buffer)
+;;                (unless (cdr tab-list)
+;;                  (ignore-errors (delete-window window)))))))
+;;     (force-mode-line-update)))
+
+
+(define-advice tab-line-close-tab (:override (&optional e))
+  "Close the selected tab by burying its buffer.
+If no tabs are left in the window, delete the window."
+  (interactive "e")
+  (let* ((posnp (event-start e))
+         (window (posn-window posnp))
+         (buffer (get-pos-property 1 'tab (car (posn-string posnp)))))
+    (with-selected-window window
+      (let ((tab-list (tab-line-tabs-window-buffers)))
+        (if (eq buffer (current-buffer))
+            (bury-buffer)
+          (set-window-prev-buffers window (assq-delete-all buffer (window-prev-buffers)))
+          (set-window-next-buffers window (delq buffer (window-next-buffers))))
+        (unless (cdr tab-list)
+          (ignore-errors (delete-window window)))))
+    (force-mode-line-update)))
+
 
 ;; Redirect backups and auto save
 (defvar my-emacs-tmp-dir
@@ -54,17 +106,6 @@
   "Navigate to Emacs configuration folder in eshell."
   (cd "~/.emacs.d"))
 
-;; Keybindings
-(global-set-key (kbd "<escape>") 'keyboard-escape-quit)
-(global-set-key (kbd "C-M-b") 'counsel-switch-buffer)
-(global-set-key (kbd "C-M-j") 'dired-jump)
-(global-set-key (kbd "C-M-s") 'counsel-projectile-rg)
-(global-set-key (kbd "C-M-f") 'counsel-find-file)
-(global-set-key (kbd "M-<up>") 'move-text-up)
-(global-set-key (kbd "M-k") 'move-text-up)
-(global-set-key (kbd "M-<down>") 'move-text-down)
-(global-set-key (kbd "M-j") 'move-text-down)
-
 ;; Functions
 (require 'projectile)
 (defun load-code-files()
@@ -84,6 +125,9 @@
 	     '("bsd"
 	       (c-basic-offset . 4)
 	       (c-hanging-semi&comma-criteria . nil)))
+
+
+
 
 (require 'lsp)
 (require 'cc-mode)
