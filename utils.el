@@ -1,6 +1,5 @@
 ;;; package --- Summary: Emacs config -*- lexical-binding: t; -*-
 ;;; Commentary:
-;;; The initial config file that loads all config modules.
 ;;; Code:
 
 (require 'projectile)

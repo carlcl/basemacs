@@ -36,7 +36,7 @@
 (use-package doom-modeline
   :ensure t
   :init (doom-modeline-mode 1)
-  :custom ((doom-modeline-height 25)))
+  :custom ((doom-modeline-height 45)))
 
 (use-package doom-themes
   :ensure t
@@ -117,7 +117,7 @@
 	ivy-posframe-width 160
         ivy-posframe-height 40
         ivy-posframe-min-width 80
-        ivy-posframe-border-width 1)
+        ivy-posframe-border-width 16)
   (setq ivy-posframe-display-functions-alist
 	'((t . ivy-posframe-display-at-frame-center))))
 

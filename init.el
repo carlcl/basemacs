@@ -6,8 +6,8 @@
 ;; Load configuration files
 (load (expand-file-name "~/.emacs.d/packages.el"))
 (load (expand-file-name "~/.emacs.d/config.el"))
-(load (expand-file-name "~/.emacs.d/utils.el"))
 (load (expand-file-name "~/.emacs.d/dev_config.el"))
+(load (expand-file-name "~/.emacs.d/utils.el"))
 (load (expand-file-name "~/.emacs.d/cmake_tasks.el"))
 (load (expand-file-name "~/.emacs.d/keybindings.el"))
 ;(add-hook 'emacs-startup-hook
