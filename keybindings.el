@@ -4,6 +4,11 @@
 
 
 ;; Keybindings
+
+;; Alt+Tab / Alt+Shift+Tab to cycle tabs
+;; (global-set-key (kbd "<C-tab>") 'tab-line-switch-to-next-tab)
+;; (global-set-key (kbd "<C-S tab>") 'tab-line-switch-to-prev-tab)
+
 (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
 (global-set-key (kbd "C-M-b") 'counsel-switch-buffer)
 (global-set-key (kbd "C-M-j") 'dired-jump)

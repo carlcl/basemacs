@@ -25,44 +25,44 @@
 (setq visible-bell t)                                        ; Disable bell and show visible highlight when executing blocked command
 
 ;;; Tab-line - Add and configure window tabs
-(require 'tab-line)
-(global-tab-line-mode 1)
-(setq tab-line-tabs-function #'tab-line-tabs-window-buffers)
-(custom-set-faces
- '(tab-line ((t (:inherit mode-line
-                          :height 110))))
- '(tab-line-tab-current ((t (:inherit tab-line
-                                      :weight bold
-                                      :foreground "orange")))))
-(with-eval-after-load 'faces
-  (set-face-attribute 'tab-line-tab-current nil
-                      :weight 'bold
-                      :foreground "orange"
-                      :box `(:line-width 6 :color ,(face-background 'tab-line))))
-(add-hook 'enable-theme-functions
-          (lambda (_)
-            (set-face-attribute 'tab-line-tab-current nil
-                                :weight 'bold
-                                :foreground "orange"
-                                :box `(:line-width 6 :color ,(face-background 'tab-line)))))
-
-;; This buries buffers when tabs are closed.
-(define-advice tab-line-close-tab (:override (&optional e))
-  "Close the selected tab by burying its buffer.
-If no tabs are left in the window, delete the window."
-  (interactive "e")
-  (let* ((posnp (event-start e))
-         (window (posn-window posnp))
-         (buffer (get-pos-property 1 'tab (car (posn-string posnp)))))
-    (with-selected-window window
-      (let ((tab-list (tab-line-tabs-window-buffers)))
-        (if (eq buffer (current-buffer))
-            (bury-buffer)
-          (set-window-prev-buffers window (assq-delete-all buffer (window-prev-buffers)))
-          (set-window-next-buffers window (delq buffer (window-next-buffers))))
-        (unless (cdr tab-list)
-          (ignore-errors (delete-window window)))))
-    (force-mode-line-update)))
+;(require 'tab-line)
+;(global-tab-line-mode 1)
+;(setq tab-line-tabs-function #'tab-line-tabs-window-buffers)
+;(custom-set-faces
+; '(tab-line ((t (:inherit mode-line
+;                          :height 110))))
+; '(tab-line-tab-current ((t (:inherit tab-line
+;                                      :weight bold
+;                                      :foreground "orange")))))
+;(with-eval-after-load 'faces
+;  (set-face-attribute 'tab-line-tab-current nil
+;                      :weight 'bold
+;                      :foreground "orange"
+;                      :box `(:line-width 6 :color ,(face-background 'tab-line))))
+;(add-hook 'enable-theme-functions
+;          (lambda (_)
+;            (set-face-attribute 'tab-line-tab-current nil
+;                                :weight 'bold
+;                                :foreground "orange"
+;                                :box `(:line-width 6 :color ,(face-background 'tab-line)))))
+;
+;;; This buries buffers when tabs are closed.
+;(define-advice tab-line-close-tab (:override (&optional e))
+;  "Close the selected tab by burying its buffer.
+;If no tabs are left in the window, delete the window."
+;  (interactive "e")
+;  (let* ((posnp (event-start e))
+;         (window (posn-window posnp))
+;         (buffer (get-pos-property 1 'tab (car (posn-string posnp)))))
+;    (with-selected-window window
+;      (let ((tab-list (tab-line-tabs-window-buffers)))
+;        (if (eq buffer (current-buffer))
+;            (bury-buffer)
+;          (set-window-prev-buffers window (assq-delete-all buffer (window-prev-buffers)))
+;          (set-window-next-buffers window (delq buffer (window-next-buffers))))
+;        (unless (cdr tab-list)
+;          (ignore-errors (delete-window window)))))
+;    (force-mode-line-update)))
 
 ;; Redirect backups and auto save
 (defvar my-emacs-tmp-dir

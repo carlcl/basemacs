@@ -62,6 +62,8 @@
   (setq evil-want-integration t)
   (setq evil-want-C-u-scroll t)
   (setq evil-undo-system 'undo-redo)
+  (setq evil-vsplit-window-right t)
+  (setq evil-split-window-below t)
   :config
   (evil-mode 1))
 
@@ -187,6 +189,20 @@
 (setq org-log-done 'time)
 (setq org-log-into-drawer t)
 (setq org-agenda-files '("~/Org/tasks.org"))
+
+;; Install via straight/use-package
+(use-package centaur-tabs
+  :ensure t
+  :hook (after-init . centaur-tabs-mode)
+  :config
+  (setq centaur-tabs-style "bar")
+  (setq centaur-tabs-cycle-scope 'tabs)
+  (setq centaur-tabs-height 32)
+  (setq centaur-tabs-set-icons t)
+  (setq centaur-tabs-set-modified-marker t)
+  :bind
+  ("C-<tab>" . centaur-tabs-forward)
+  ("C-<iso-lefttab>" . centaur-tabs-backward))
       
 ;; Treemacs
 (use-package treemacs
